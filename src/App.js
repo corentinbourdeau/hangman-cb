@@ -19,7 +19,7 @@ function App() {
   ];
   const [word, setWord] = useState("");
   const [guessedLetters, setGuessedLetters] = useState([]);
-  const [life, setLife] = useState(7);
+  const [life, setLife] = useState(6);
   const [letter, setLetter] = useState("");
 
   useEffect(() => {
@@ -54,11 +54,28 @@ function App() {
     setLife(7);
     setLetter("");
     setGuessedLetters([]);
-  }
+  };
 
   return (
     <div className="App">
       <header className="App-header">
+        <table>
+          <tr>
+            <td></td>
+            <td>{life < 6 ? 0 : ""}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{life < 5  ? "-" : ""}</td>
+            <td>{life < 4 ? 8 : ""}</td>
+            <td>{life < 3 ? "-" : ""}</td>
+          </tr>
+          <tr>
+            <td>{life < 2 ? "/" : ""}</td>
+            <td></td>
+            <td>{life < 1 ? "\\" : ""}</td>
+          </tr>
+        </table>
         <div
           style={{
             position: "absolute",
@@ -81,8 +98,22 @@ function App() {
           </a>
         </div>
         <h1>Hangman</h1>
-        <h3>Life left: {life}</h3>
-        <p>{getSpacedWord()}</p>
+        <h3>
+          Life left :{" "}
+          {life == 2 ? (
+            <span style={{ color: "orange" }}>{life}</span>
+          ) : life <= 1 ? (
+            <span style={{ color: "red" }}>{life}</span>
+          ) : (
+            life
+          )}
+        </h3>
+        <p>
+          {getSpacedWord()}{" "}
+          <button onClick={handleReload}>
+            <FaUndo />
+          </button>
+        </p>
         <div>
           <input
             type="text"
@@ -95,12 +126,21 @@ function App() {
             }}
           />
           <button onClick={handleInput}>Enter</button>
-          <button onClick={handleReload}><FaUndo/></button>
         </div>
-        {life <= 0 && <p>Game Over! The word was: {word}</p>}
+        {life <= 0 && <p>Game Over ! The word was : {word}</p>}
         {word.split("").every((letter) => guessedLetters.includes(letter)) && (
-          <p>Congratulations! You guessed the word: {word}</p>
+          <p>Congratulations ! You guessed the word : {word}</p>
         )}
+        <p>
+          {guessedLetters.length == 1
+            ? "Guessed letter : "
+            : guessedLetters.length > 1
+            ? "Guessed letters : "
+            : ""}
+          {guessedLetters.map((letter) => {
+            return (letter + " ").toUpperCase();
+          })}
+        </p>
       </header>
     </div>
   );
